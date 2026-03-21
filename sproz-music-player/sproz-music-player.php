@@ -5,7 +5,8 @@
  * Description: Lightweight music player with custom DB tables, playlist, waveform, album art, genres, categories, tags, external audio (S3, R2) and public view pages.
  * Version:     2.3.0
  * Author:      Abir Khan
- * License:     GPL2
+ * License:     GPL-2.0
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: sproz-music-player
  */
 
