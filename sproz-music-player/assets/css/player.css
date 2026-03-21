@@ -1,0 +1,318 @@
+/* ── Sproz Music Player CSS ─────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+/* ── Variables ───────────────────────────────────────────────────────────── */
+.sproz-player {
+    --spz-bg:         #0a0a0f;
+    --spz-bg2:        #12121a;
+    --spz-bg3:        #1a1a26;
+    --spz-border:     rgba(255,255,255,.07);
+    --spz-text:       #f0f0f5;
+    --spz-muted:      #8888aa;
+    --spz-accent:     #b4ff6e;
+    --spz-accent2:    #6effe0;
+    --spz-active-bg:  rgba(180,255,110,.06);
+    --spz-hover-bg:   rgba(255,255,255,.04);
+    --spz-radius:     16px;
+    --spz-font:       'DM Sans', system-ui, sans-serif;
+    --spz-font-head:  'Syne', system-ui, sans-serif;
+    --spz-progress:   rgba(255,255,255,.15);
+    --spz-exp-bg:     rgba(180,255,110,.04);
+}
+.sproz-player.sproz-skin-light {
+    --spz-bg:         #f4f4f0;
+    --spz-bg2:        #ffffff;
+    --spz-bg3:        #ebebeb;
+    --spz-border:     rgba(0,0,0,.08);
+    --spz-text:       #111118;
+    --spz-muted:      #777788;
+    --spz-accent:     #2255ff;
+    --spz-accent2:    #00bbaa;
+    --spz-active-bg:  rgba(34,85,255,.06);
+    --spz-hover-bg:   rgba(0,0,0,.03);
+    --spz-progress:   rgba(0,0,0,.12);
+    --spz-exp-bg:     rgba(34,85,255,.04);
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+.sproz-player {
+    font-family:  var(--spz-font);
+    background:   var(--spz-bg);
+    border:       1px solid var(--spz-border);
+    border-radius: var(--spz-radius);
+    overflow:     hidden;
+    display:      block !important;
+    margin:       1.5rem auto;
+    max-width:    860px;
+    color:        var(--spz-text);
+    box-shadow:   0 24px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04);
+}
+
+/* ── HERO ─────────────────────────────────────────────────────────────────── */
+.sproz-hero {
+    display:    flex;
+    gap:        28px;
+    padding:    28px 28px 24px;
+    background: linear-gradient(160deg, var(--spz-bg3) 0%, var(--spz-bg) 100%);
+    border-bottom: 1px solid var(--spz-border);
+    position:   relative;
+    overflow:   hidden;
+}
+.sproz-hero::before {
+    content:  '';
+    position: absolute;
+    inset:    0;
+    background: radial-gradient(ellipse 60% 80% at 0% 0%, rgba(180,255,110,.06) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.sproz-hero-cover {
+    flex-shrink: 0;
+    width:       160px;
+    height:      160px;
+    border-radius: 10px;
+    overflow:    hidden;
+    box-shadow:  0 12px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08);
+    position:    relative;
+    z-index:     1;
+}
+.sproz-hero-cover img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+}
+.sproz-hero-cover-placeholder {
+    width: 100%; height: 100%;
+    background: var(--spz-bg3);
+    display: flex; align-items: center; justify-content: center;
+}
+.sproz-hero-cover-placeholder svg {
+    width: 48px; height: 48px;
+    stroke: var(--spz-muted); fill: none; stroke-width: 1.5;
+    stroke-linecap: round; stroke-linejoin: round;
+}
+
+.sproz-hero-info {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    position: relative; z-index: 1;
+}
+.sproz-hero-label {
+    font-size:     .62rem;
+    font-weight:   700;
+    letter-spacing: .14em;
+    color:         var(--spz-accent);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+.sproz-hero-title {
+    font-family:  var(--spz-font-head);
+    font-size:    clamp(1.6rem, 4vw, 2.6rem);
+    font-weight:  800;
+    line-height:  1.05;
+    color:        var(--spz-text);
+    margin:       0 0 8px;
+    letter-spacing: -.02em;
+}
+.sproz-hero-artist {
+    font-size:    .85rem;
+    color:        var(--spz-muted);
+    margin-bottom: 8px;
+    font-weight:  500;
+}
+.sproz-hero-meta {
+    display:    flex;
+    align-items: center;
+    gap:        6px;
+    font-size:  .78rem;
+    color:      var(--spz-muted);
+    margin-bottom: 18px;
+}
+.sproz-meta-dot { opacity: .4; font-size: 1.2em; }
+
+.sproz-hero-actions { display: flex; align-items: center; gap: 10px; }
+
+.sproz-btn-play-all {
+    display:       inline-flex;
+    align-items:   center;
+    gap:           9px;
+    background:    var(--spz-accent);
+    color:         #0a0a0f;
+    border:        none;
+    border-radius: 50px;
+    padding:       11px 22px;
+    font-family:   var(--spz-font);
+    font-size:     .85rem;
+    font-weight:   700;
+    cursor:        pointer;
+    box-shadow:    0 4px 20px rgba(180,255,110,.3);
+    transition:    transform .15s, box-shadow .15s, background .15s;
+    white-space:   nowrap;
+}
+.sproz-btn-play-all:hover  { transform: scale(1.04); box-shadow: 0 6px 28px rgba(180,255,110,.45); }
+.sproz-btn-play-all:active { transform: scale(.96); }
+.sproz-btn-play-all svg    { width: 13px; height: 13px; fill: #0a0a0f; stroke: none; flex-shrink: 0; }
+.sproz-play-label          { pointer-events: none; }
+
+/* ── TABLE ────────────────────────────────────────────────────────────────── */
+.sproz-table-wrap { overflow: hidden; }
+
+.sproz-table-head {
+    display:       grid;
+    grid-template-columns: 44px 1fr 160px 52px;
+    align-items:   center;
+    padding:       10px 16px 10px 12px;
+    border-bottom: 1px solid var(--spz-border);
+    font-size:     .65rem;
+    font-weight:   700;
+    letter-spacing: .1em;
+    color:         var(--spz-muted);
+    text-transform: uppercase;
+}
+
+/* ── ROW ──────────────────────────────────────────────────────────────────── */
+.sproz-row {
+    display:       grid;
+    grid-template-columns: 44px 1fr 160px 52px;
+    align-items:   center;
+    padding:       6px 16px 6px 12px;
+    cursor:        pointer;
+    border-bottom: 1px solid transparent;
+    transition:    background .12s;
+    min-height:    56px;
+}
+.sproz-row:hover                      { background: var(--spz-hover-bg); }
+.sproz-row.is-playing                 { background: rgba(180,255,110,.10); border-left: 3px solid #b4ff6e; }
+.sproz-row:not(.is-playing)           { border-left: 3px solid transparent; }
+.sproz-row:last-of-type               { border-bottom: none; }
+.sproz-expanded + .sproz-row          { border-top: 1px solid var(--spz-border); }
+
+/* State column */
+.sproz-col-num {
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    position:        relative;
+    height:          100%;
+}
+.sproz-track-num {
+    font-size:   .82rem;
+    color:       var(--spz-muted);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    line-height: 1;
+}
+.sproz-row-play-icon {
+    position: absolute;
+    width:    16px; height: 16px;
+    fill:     var(--spz-text);
+    stroke:   none;
+    display:  none;
+}
+/* Animated bars */
+.sproz-bars {
+    position: absolute;
+    display:  none;
+    gap:      2px;
+    align-items: flex-end;
+    height:   16px;
+}
+.sproz-bar {
+    width:         3px;
+    border-radius: 2px;
+    background:    var(--spz-accent);
+    display:       none;
+    animation:     sproz-bounce 1s ease-in-out infinite;
+}
+.sproz-bar:nth-child(1) { height: 10px; animation-delay: 0s;   }
+.sproz-bar:nth-child(2) { height: 16px; animation-delay: .18s; }
+.sproz-bar:nth-child(3) { height: 8px;  animation-delay: .09s; }
+@keyframes sproz-bounce { 0%,100%{transform:scaleY(.35)} 50%{transform:scaleY(1)} }
+
+/* Track column */
+.sproz-col-track {
+    display:     flex;
+    align-items: center;
+    gap:         12px;
+    min-width:   0;
+}
+.sproz-row-art {
+    width:        42px; height: 42px;
+    border-radius: 6px;
+    object-fit:   cover;
+    flex-shrink:  0;
+    box-shadow:   0 2px 8px rgba(0,0,0,.4);
+}
+.sproz-row-art-empty {
+    width:        42px; height: 42px;
+    border-radius: 6px;
+    background:   var(--spz-bg3);
+    border:       1px solid var(--spz-border);
+    display:      flex; align-items: center; justify-content: center;
+    flex-shrink:  0;
+}
+.sproz-row-art-empty svg { width: 16px; height: 16px; stroke: var(--spz-muted); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.sproz-row-text  { min-width: 0; }
+.sproz-row-title {
+    display:       block;
+    font-size:     .9rem;
+    font-weight:   600;
+    color:         var(--spz-text);
+    white-space:   nowrap;
+    overflow:      hidden;
+    text-overflow: ellipsis;
+    line-height:   1.3;
+}
+.sproz-row.is-playing .sproz-row-title { color: var(--spz-accent); }
+.sproz-row-artist {
+    display:   block;
+    font-size: .75rem;
+    color:     var(--spz-muted);
+    margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Album / Genre column */
+.sproz-row-album {
+    font-size:     .78rem;
+    color:         var(--spz-muted);
+    white-space:   nowrap;
+    overflow:      hidden;
+    text-overflow: ellipsis;
+    padding-right: 8px;
+}
+.sproz-row-album:hover { color: var(--spz-text); text-decoration: underline; cursor: pointer; }
+
+/* Duration column */
+.sproz-row-dur {
+    font-size:   .8rem;
+    color:       var(--spz-muted);
+    text-align:  right;
+    font-variant-numeric: tabular-nums;
+}
+
+
+
+/* ── Table header col alignment ──────────────────────────────────────────── */
+.sproz-table-head .sproz-col-num   { text-align: center; }
+.sproz-table-head .sproz-col-album { color: var(--spz-muted); }
+.sproz-table-head .sproz-col-dur   { text-align: right; display: flex; justify-content: flex-end; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .sproz-hero { flex-direction: column; align-items: center; text-align: center; padding: 20px; }
+    .sproz-hero-cover { width: 130px; height: 130px; }
+    .sproz-hero-info  { align-items: center; }
+    .sproz-table-head,
+    .sproz-row { grid-template-columns: 36px 1fr 44px; }
+    .sproz-col-album, .sproz-table-head .sproz-col-album { display: none; }
+    .sproz-expanded { padding-left: 12px; }
+    .sproz-exp-vol { display: none; }
+}
+@media (max-width: 420px) {
+    .sproz-row-art { width: 36px; height: 36px; }
+    .sproz-hero-title { font-size: 1.4rem; }
+}
+
+/* ── Legacy compat — hide old idle/active wrappers if present ─────────────── */
+.sproz-idle-state, .sproz-active-state { display: none !important; }

@@ -1,0 +1,367 @@
+/* ── Sproz Music Player — Sticky Bar v2 ─────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+    --sb-h:       72px;
+    --sb-bg:      #0e0e14;
+    --sb-border:  rgba(255,255,255,.06);
+    --sb-text:    #f0f0f5;
+    --sb-muted:   #666680;
+    --sb-accent:  #b4ff6e;
+    --sb-accent2: rgba(180,255,110,.15);
+    --sb-btn-bg:  rgba(255,255,255,.06);
+    --sb-btn-hover: rgba(255,255,255,.12);
+    --sb-z:       99999;
+    --sb-font:    'DM Sans', system-ui, sans-serif;
+}
+
+/* ── Bar base ─────────────────────────────────────────────────────────────── */
+#sproz-sticky-bar {
+    position:   fixed;
+    bottom:     0; left: 0; right: 0;
+    height:     var(--sb-h);
+    background: var(--sb-bg);
+    border-top: 1px solid var(--sb-border);
+    z-index:    var(--sb-z);
+    display:    flex;
+    align-items: center;
+    padding:    0 20px;
+    gap:        0;
+    font-family: var(--sb-font);
+    box-shadow: 0 -8px 40px rgba(0,0,0,.5);
+    transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .3s;
+    will-change: transform;
+    box-sizing: border-box;
+}
+
+.sproz-sticky-hidden { transform: translateY(100%); opacity: 0; pointer-events: none; }
+.sproz-sticky-visible { transform: translateY(0);   opacity: 1; pointer-events: all; }
+
+body.sproz-has-player { padding-bottom: var(--sb-h) !important; }
+
+/* ── Thin accent line at top ─────────────────────────────────────────────── */
+#sproz-sticky-bar::before {
+    content:    '';
+    position:   absolute;
+    top:        0; left: 0; right: 0;
+    height:     2px;
+    background: linear-gradient(90deg, transparent 0%, var(--sb-accent) 40%, transparent 100%);
+    opacity:    .5;
+}
+
+/* ── Progress bar — sits at very top of bar ──────────────────────────────── */
+.sproz-sticky-progress-wrap {
+    position:   absolute;
+    top:        -1px; left: 0; right: 0;
+    height:     3px;
+    cursor:     pointer;
+    z-index:    1;
+}
+.sproz-sticky-progress-bg {
+    width: 100%; height: 3px;
+    background: rgba(255,255,255,.08);
+    position: absolute; top: 0; left: 0;
+    overflow: hidden;
+}
+.sproz-sticky-progress-fill {
+    height: 100%;
+    background: var(--sb-accent);
+    width: 0%;
+    transition: width .1s linear;
+    box-shadow: 0 0 8px rgba(180,255,110,.6);
+}
+.sproz-sticky-seek {
+    position:   absolute;
+    top:        -6px; left: 0;
+    width:      100%; height: 14px;
+    opacity:    0;
+    cursor:     pointer;
+    -webkit-appearance: none;
+    margin:     0;
+    z-index:    2;
+}
+
+/* ── Left: Art + Info ────────────────────────────────────────────────────── */
+.sproz-sticky-left {
+    display:     flex;
+    align-items: center;
+    gap:         12px;
+    width:       260px;
+    flex-shrink: 0;
+    min-width:   0;
+}
+
+.sproz-sticky-art {
+    width:        44px;
+    height:       44px;
+    flex-shrink:  0;
+    position:     relative;
+    border-radius: 6px;
+    overflow:     hidden;
+}
+.sproz-sticky-art img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: none;
+    border-radius: 6px;
+}
+.sproz-sticky-art.has-art img                { display: block; }
+.sproz-sticky-art.has-art .sproz-sticky-art-placeholder { display: none; }
+.sproz-sticky-art-placeholder {
+    width:           44px; height: 44px;
+    border-radius:   6px;
+    background:      #1a1a26;
+    border:          1px solid var(--sb-border);
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    font-size:       1.1rem;
+    color:           var(--sb-muted);
+}
+
+/* Spinning animation for art when playing */
+.sproz-sticky-art.is-spinning img {
+    animation: sb-spin 8s linear infinite;
+}
+@keyframes sb-spin { to { transform: rotate(360deg); } }
+
+.sproz-sticky-info { min-width: 0; }
+.sproz-sticky-title {
+    font-size:     .83rem;
+    font-weight:   600;
+    color:         var(--sb-text);
+    white-space:   nowrap;
+    overflow:      hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 1px;
+    line-height:   1.3;
+}
+.sproz-sticky-artist {
+    font-size:     .72rem;
+    color:         var(--sb-muted);
+    white-space:   nowrap;
+    overflow:      hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Center: Controls ────────────────────────────────────────────────────── */
+.sproz-sticky-center {
+    flex:            1;
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+    gap:             6px;
+    padding:         0 16px;
+}
+
+.sproz-sticky-controls {
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    gap:             2px;
+}
+
+/* All control buttons */
+.sproz-sb-btn {
+    background:    none;
+    border:        none;
+    cursor:        pointer;
+    color:         var(--sb-muted);
+    width:         34px;
+    height:        34px;
+    border-radius: 50%;
+    display:       flex;
+    align-items:   center;
+    justify-content: center;
+    transition:    color .15s, background .15s, transform .1s;
+    padding:       0;
+    flex-shrink:   0;
+}
+.sproz-sb-btn svg {
+    width:           16px; height: 16px;
+    stroke:          currentColor; fill: none;
+    stroke-width:    2;
+    stroke-linecap:  round;
+    stroke-linejoin: round;
+    pointer-events:  none;
+}
+.sproz-sb-btn:hover  { color: var(--sb-text); background: var(--sb-btn-hover); }
+.sproz-sb-btn:active { transform: scale(.88); }
+.sproz-sb-btn.active { color: var(--sb-accent); }
+
+/* Play/Pause — accent circle */
+.sproz-sb-play {
+    background: var(--sb-accent) !important;
+    color:      #0a0a0f !important;
+    width:      40px !important;
+    height:     40px !important;
+    box-shadow: 0 0 18px rgba(180,255,110,.35);
+    transition: box-shadow .2s, transform .1s !important;
+}
+.sproz-sb-play:hover  {
+    background: #ccff99 !important;
+    box-shadow: 0 0 28px rgba(180,255,110,.55);
+}
+.sproz-sb-play svg { width: 15px; height: 15px; fill: #0a0a0f; stroke: none; }
+
+/* Time labels */
+.sproz-sb-cur, .sproz-sb-dur {
+    font-size:   .67rem;
+    color:       var(--sb-muted);
+    font-variant-numeric: tabular-nums;
+    min-width:   28px;
+    font-weight: 500;
+}
+.sproz-sb-dur { text-align: right; }
+
+/* Progress row inside center */
+.sproz-sticky-progress-row {
+    display:     flex;
+    align-items: center;
+    gap:         8px;
+    width:       100%;
+    max-width:   480px;
+}
+.sproz-sticky-progress-wrap-inner {
+    flex:     1;
+    position: relative;
+    height:   3px;
+    cursor:   pointer;
+}
+.sproz-sticky-progress-bg-inner {
+    width: 100%; height: 3px;
+    background: rgba(255,255,255,.1);
+    border-radius: 2px;
+    overflow: hidden;
+    position: absolute; top: 0; left: 0;
+}
+.sproz-sticky-progress-fill-inner {
+    height: 100%;
+    background: var(--sb-accent);
+    border-radius: 2px;
+    width: 0%;
+    transition: width .1s linear;
+}
+.sproz-sticky-seek-inner {
+    position: absolute; top: -8px; left: 0;
+    width: 100%; height: 20px;
+    opacity: 0; cursor: pointer;
+    -webkit-appearance: none; margin: 0;
+}
+.sproz-sticky-progress-wrap-inner:hover .sproz-sticky-progress-fill-inner {
+    box-shadow: 0 0 6px rgba(180,255,110,.5);
+}
+
+/* ── Right: Volume + actions ─────────────────────────────────────────────── */
+.sproz-sticky-right {
+    width:       260px;
+    flex-shrink: 0;
+    display:     flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap:         6px;
+}
+
+.sproz-sb-vol-icon {
+    width:  15px; height: 15px;
+    flex-shrink: 0;
+    color:  var(--sb-muted);
+}
+.sproz-sb-vol-icon path, .sproz-sb-vol-icon polygon {
+    stroke: currentColor; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.sproz-sb-volume {
+    -webkit-appearance: none;
+    width:     80px; height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,.1);
+    outline:   none;
+    cursor:    pointer;
+}
+.sproz-sb-volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width:  12px; height: 12px;
+    border-radius: 50%;
+    background: var(--sb-text);
+    cursor: pointer;
+    transition: background .15s;
+}
+.sproz-sb-volume:hover::-webkit-slider-thumb { background: var(--sb-accent); }
+
+/* ── Queue drawer ─────────────────────────────────────────────────────────── */
+#sproz-sb-queue {
+    display:       none;
+    position:      fixed;
+    bottom:        var(--sb-h);
+    right:         0;
+    width:         320px;
+    max-height:    400px;
+    background:    #13131c;
+    border:        1px solid var(--sb-border);
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    z-index:       var(--sb-z);
+    flex-direction: column;
+    overflow:      hidden;
+    box-shadow:    -4px -4px 24px rgba(0,0,0,.5);
+}
+#sproz-sb-queue.open { display: flex; }
+
+.sproz-sb-queue-header {
+    display:         flex;
+    justify-content: space-between;
+    align-items:     center;
+    padding:         12px 16px;
+    border-bottom:   1px solid var(--sb-border);
+    font-size:       .78rem;
+    font-weight:     700;
+    color:           var(--sb-text);
+    letter-spacing:  .05em;
+    text-transform:  uppercase;
+}
+.sproz-sb-queue-list {
+    overflow-y:  auto;
+    flex:        1;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.1) transparent;
+}
+.sproz-sb-queue-item {
+    display:     flex;
+    align-items: center;
+    gap:         10px;
+    padding:     8px 14px;
+    cursor:      pointer;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    transition:  background .12s;
+}
+.sproz-sb-queue-item:hover    { background: rgba(255,255,255,.04); }
+.sproz-sb-queue-item.is-active { background: rgba(180,255,110,.08); }
+.sproz-sb-queue-item.is-active .sproz-sb-q-title { color: var(--sb-accent); }
+
+.sproz-sb-queue-num { font-size: .72rem; color: var(--sb-muted); min-width: 18px; text-align: center; }
+.sproz-sb-q-art     { width: 34px; height: 34px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+.sproz-sb-q-info    { flex: 1; min-width: 0; }
+.sproz-sb-q-title   { display: block; font-size: .8rem; font-weight: 600; color: var(--sb-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sproz-sb-q-artist  { display: block; font-size: .71rem; color: var(--sb-muted); }
+.sproz-sb-q-dur     { font-size: .71rem; color: var(--sb-muted); flex-shrink: 0; }
+
+/* ── Page transition ─────────────────────────────────────────────────────── */
+#sproz-content { transition: opacity .15s; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .sproz-sticky-left, .sproz-sticky-right { width: auto; }
+    .sproz-sticky-right { gap: 4px; }
+    .sproz-sb-volume, .sproz-sb-vol-icon { display: none; }
+    .sproz-sticky-left { width: 180px; }
+}
+@media (max-width: 640px) {
+    #sproz-sticky-bar { padding: 0 12px; gap: 0; }
+    .sproz-sticky-left { width: 140px; }
+    .sproz-sb-shuffle, .sproz-sb-repeat { display: none; }
+    .sproz-sb-cur, .sproz-sb-dur { display: none; }
+    .sproz-sticky-progress-row { max-width: 100%; }
+    #sproz-sb-queue { width: 100%; right: 0; left: 0; border-radius: 12px 12px 0 0; }
+}

@@ -1,0 +1,140 @@
+/* ── Sproz Music Player Admin CSS ─────────────────────────────────────────────────── */
+
+.slite-meta-box { padding: 4px 0; }
+
+.slite-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+@media (max-width: 782px) { .slite-grid-2 { grid-template-columns: 1fr; } }
+
+.slite-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.slite-field label { font-weight: 600; font-size: .85rem; color: #1d2327; }
+
+.slite-field input[type="text"],
+.slite-field input[type="url"],
+.slite-field input[type="number"],
+.slite-field select {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    font-size: .9rem;
+    box-sizing: border-box;
+}
+.slite-field input:focus, .slite-field select:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+.slite-hint { font-size: .78rem; color: #646970; margin: 2px 0 0; }
+
+.slite-upload-row { display: flex; gap: 8px; align-items: center; }
+.slite-upload-row input { flex: 1; }
+.slite-upload-btn { white-space: nowrap; }
+
+/* ── Track picker ────────────────────────────────────────────────────────── */
+.slite-track-picker {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+}
+@media (max-width: 782px) { .slite-track-picker { grid-template-columns: 1fr; } }
+
+.slite-track-list {
+    border: 1px solid #c3c4c7;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.slite-track-list h4 {
+    background: #f0f0f1;
+    margin: 0;
+    padding: 8px 12px;
+    font-size: .82rem;
+    border-bottom: 1px solid #c3c4c7;
+}
+.slite-track-list h4 small { font-weight: 400; color: #646970; margin-left: 6px; }
+
+.slite-track-item {
+    display:     flex;
+    align-items: center;
+    gap:         8px;
+    padding:     7px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size:   .83rem;
+    background:  #fff;
+}
+.slite-track-item:last-child { border-bottom: none; }
+.slite-track-item:hover { background: #f6f7f7; }
+
+.slite-track-title  { flex: 1; font-weight: 500; }
+.slite-track-artist { color: #646970; font-size: .76rem; }
+
+.slite-add-track, .slite-remove-track {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+.slite-add-track    { color: #2271b1; }
+.slite-remove-track { color: #d63638; }
+.slite-add-track:hover    { background: #e8f0fb; }
+.slite-remove-track:hover { background: #fce9e9; }
+
+.slite-drag-handle { color: #999; cursor: grab; margin-right: 2px; }
+
+.slite-playlist-tracks .slite-track-item { background: #fafafa; }
+.slite-playlist-tracks .slite-track-item.sortable-ghost { opacity: .4; }
+
+/* ── Quick Edit Panel ────────────────────────────────────────────────────── */
+.slite-quick-edit-row td { padding: 0 !important; background: #f0f6fb !important; }
+
+.slite-quick-edit-panel {
+    padding:      16px 20px;
+    border-left:  4px solid #2271b1;
+    background:   #f0f6fb;
+}
+.slite-quick-edit-panel h4 {
+    margin:      0 0 14px;
+    font-size:   .9rem;
+    color:       #1d2327;
+}
+.slite-quick-edit-panel h4 em { color: #2271b1; font-style: normal; font-weight: 600; }
+
+.slite-qe-grid {
+    display:               grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap:                   12px;
+    margin-bottom:         14px;
+}
+@media (max-width: 1100px) { .slite-qe-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 782px)  { .slite-qe-grid { grid-template-columns: 1fr; } }
+
+.slite-qe-full { grid-column: 1 / -1; }
+
+.slite-qe-actions {
+    display:     flex;
+    align-items: center;
+    gap:         10px;
+    flex-wrap:   wrap;
+}
+.slite-qe-msg    { font-size: .82rem; font-weight: 600; }
+.slite-qe-spinner { float: none !important; }
+
+/* Status badges */
+.slite-status {
+    display:       inline-block;
+    padding:       2px 8px;
+    border-radius: 10px;
+    font-size:     .75rem;
+    font-weight:   600;
+    text-transform: capitalize;
+}
+.slite-status-publish { background: #d1fae5; color: #065f46; }
+.slite-status-draft   { background: #fef3c7; color: #92400e; }
+.slite-status-trash   { background: #fee2e2; color: #991b1b; }
