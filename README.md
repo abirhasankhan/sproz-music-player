@@ -17,7 +17,7 @@ A lightweight, self-hosted WordPress music player plugin with persistent playbac
 - **External audio support** — host files on S3, Cloudflare R2, Backblaze B2, or any CDN
 - **Full admin CRUD** — manage tracks, albums, genres, categories, and tags from WP admin
 - **Quick Edit** — inline track editing directly from the tracks list
-- **Shortcode player** — embed anywhere with `[slite_player]`
+- **Shortcode player** — embed anywhere with `[sproz_player]`
 - **Widget support** — drop the player into any widget area
 - **Public view pages** — auto-generated pages for tracks, albums, and the music library
 - **REST API** — programmatic access to tracks and albums
@@ -49,30 +49,30 @@ The plugin creates 9 custom tables on activation:
 
 | Table | Description |
 |---|---|
-| `{prefix}slite_tracks` | Songs — title, artist, audio URL, duration, art, play count |
-| `{prefix}slite_albums` | Albums / playlists — metadata, skin, release year |
-| `{prefix}slite_album_tracks` | Pivot: album ↔ track with sort order |
-| `{prefix}slite_genres` | Genres taxonomy (hierarchical) |
-| `{prefix}slite_categories` | Music categories taxonomy (hierarchical) |
-| `{prefix}slite_tags` | Music tags (flat) |
-| `{prefix}slite_track_genres` | Pivot: track ↔ genre |
-| `{prefix}slite_track_categories` | Pivot: track ↔ category |
-| `{prefix}slite_track_tags` | Pivot: track ↔ tag |
+| `{prefix}sproz_tracks` | Songs — title, artist, audio URL, duration, art, play count |
+| `{prefix}sproz_albums` | Albums / playlists — metadata, skin, release year |
+| `{prefix}sproz_album_tracks` | Pivot: album ↔ track with sort order |
+| `{prefix}sproz_genres` | Genres taxonomy (hierarchical) |
+| `{prefix}sproz_categories` | Music categories taxonomy (hierarchical) |
+| `{prefix}sproz_tags` | Music tags (flat) |
+| `{prefix}sproz_track_genres` | Pivot: track ↔ genre |
+| `{prefix}sproz_track_categories` | Pivot: track ↔ category |
+| `{prefix}sproz_track_tags` | Pivot: track ↔ tag |
 
 ---
 
 ## 🎛️ Shortcode
 
-Embed the player anywhere using `[slite_player]`:
+Embed the player anywhere using `[sproz_player]`:
 
 ```
-[slite_player album="42"]              — full album / playlist
-[slite_player track="15"]             — single track
-[slite_player genre="jazz"]           — all tracks in a genre
-[slite_player category="hip-hop"]     — all tracks in a category
-[slite_player tag="chill"]            — all tracks with a tag
-[slite_player album="42" skin="light"] — light skin
-[slite_player genre="pop" limit="20"] — limit track count
+[sproz_player album="42"]               — full album / playlist
+[sproz_player track="15"]              — single track
+[sproz_player genre="jazz"]            — all tracks in a genre
+[sproz_player category="hip-hop"]      — all tracks in a category
+[sproz_player tag="chill"]             — all tracks with a tag
+[sproz_player album="42" skin="light"] — light skin
+[sproz_player genre="pop" limit="20"]  — limit track count
 ```
 
 ### Shortcode Parameters
@@ -95,8 +95,8 @@ After flushing permalinks, these URLs are available automatically:
 
 | URL | Description |
 |---|---|
-| `/slite-track/{id}` | Single track page |
-| `/slite-album/{id}` | Album page with full tracklist |
+| `/sproz-track/{id}` | Single track page |
+| `/sproz-album/{id}` | Album page with full tracklist |
 | `/music-library/` | Browse all albums |
 | `/music-library/?view=tracks` | All tracks |
 | `/music-library/?view=genres` | Genre grid |
@@ -108,9 +108,9 @@ After flushing permalinks, these URLs are available automatically:
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/wp-json/sonaar-lite/v1/tracks` | `GET` | List tracks (filter by `album`, `genre`, `category`, `tag`, `limit`) |
-| `/wp-json/sonaar-lite/v1/albums` | `GET` | List all albums |
-| `/wp-json/sonaar-lite/v1/play/{id}` | `POST` | Increment play count for a track |
+| `/wp-json/sproz-music-player/v1/tracks` | `GET` | List tracks (filter by `album`, `genre`, `category`, `tag`, `limit`) |
+| `/wp-json/sproz-music-player/v1/albums` | `GET` | List all albums |
+| `/wp-json/sproz-music-player/v1/play/{id}` | `POST` | Increment play count for a track |
 
 ---
 
@@ -118,13 +118,14 @@ After flushing permalinks, these URLs are available automatically:
 
 ```
 sproz-music-player/
-├── sonaar-lite.php              # Main plugin file
+├── sproz-music-player.php       # Main plugin file
 ├── readme.txt
+├── README.md
 ├── includes/
 │   ├── database.php             # Table schema & activation
-│   ├── db.php                   # Slite_DB — all queries
+│   ├── db.php                   # Sproz_DB — all queries
 │   ├── admin.php                # Admin CRUD pages, Quick Edit
-│   ├── shortcode.php            # [slite_player] shortcode
+│   ├── shortcode.php            # [sproz_player] shortcode
 │   ├── widget.php               # Sidebar widget
 │   ├── rest-api.php             # REST endpoints
 │   └── routes.php               # Public URL handling
@@ -156,7 +157,8 @@ The plugin uses a **shell isolation + AJAX navigation** architecture:
 2. All page content is wrapped in `#sproz-content` — the single swappable zone
 3. Every internal link click is intercepted; instead of a real navigation, the target URL is fetched via `fetch()`
 4. Only `#sproz-content` innerHTML is replaced — the shell and audio engine are untouched
-5. `sessionStorage` acts as a fallback for real reloads (browser back, direct URL entry)
+5. Shell elements are stripped from fetched HTML **before** DOM parsing to prevent duplicate audio initialization
+6. `sessionStorage` acts as a fallback for real reloads (browser back, direct URL entry)
 
 This means music plays **continuously with zero gap** across page navigations.
 
@@ -218,6 +220,19 @@ Set `audio_type = external` and paste any direct MP3/M4A URL. Tested providers:
 
 **WaveSurfer error in console**
 → Ensure the audio file URL is publicly accessible (no auth required) and is a direct MP3/M4A link.
+
+---
+
+## ⬆️ Upgrading from Old Version
+
+If you were using the old `Sonaar Lite` plugin:
+
+1. **Deactivate** the old plugin — do not delete yet
+2. **Export** your tracks data if needed
+3. **Install** Sproz Music Player
+4. **Activate** — new `sproz_*` tables will be created automatically
+5. Re-enter your tracks (old `slite_*` tables are separate and unaffected)
+6. Delete the old plugin once confirmed working
 
 ---
 
